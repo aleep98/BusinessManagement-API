@@ -1,16 +1,4 @@
-import type { Product } from "./types/product.js";
 import { createProduct } from "./services/productService.js";
-
-let product1: Product = {
-  id: "1",
-  name: "Notebook Gamer",
-  price: 5500.0,
-  description: "the most power notebook for gamers",
-  quantityInStock: 100,
-  category: "peripheral",
-  createdAt: new Date(),
-  updatedAt: new Date(),
-};
 
 function isValidQuantity(quantity: number): boolean {
   if (quantity >= 0) {
@@ -39,14 +27,21 @@ registerProduct(10, 0);
 
 try {
   const product = createProduct({
-    name: "Notebook Gamer",
-    description: "Notebook para jogos",
-    price: 5500,
-    quantityInStock: 10,
+    name: "Mouse Gamer",
+    description: "O melhor mouse para jogos da atualidade",
+    price: 500,
+    quantityInStock: 20,
     category: "Eletrônicos",
   });
 
-  console.log(product);
+  const product2 = createProduct({
+    name: "Monitor",
+    description: "O monitor da nova era de games",
+    price: 1000,
+    quantityInStock: 10,
+    category: "Eletrônicos",
+  })
+  console.log(product === product2);
 } catch (error) {
   console.log(error);
 }
