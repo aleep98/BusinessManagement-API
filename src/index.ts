@@ -1,4 +1,9 @@
-import { createProduct } from "./services/productService.js";
+import {
+  adjustStock,
+  calculateNewStock,
+  createProduct,
+  updateProductStock,
+} from "./services/productService.js";
 
 function isValidQuantity(quantity: number): boolean {
   if (quantity >= 0) {
@@ -40,9 +45,26 @@ try {
     price: 1000,
     quantityInStock: 10,
     category: "Eletrônicos",
-  })
-  console.log(product === product2);
+  });
+  const updatedProduct = updateProductStock(product, "loss", 3);
+  console.log(product.quantityInStock, updatedProduct.quantityInStock);
+
+  console.log(product.id === product2.id);
+
+  const result = adjustStock(product, "loss", 3);
+
+  console.log(product.quantityInStock); // saldo original: 20
+  console.log(result.updatedProduct.quantityInStock); // saldo novo: 17
+  console.log(result.movement); // dados da perda registrada
+  
 } catch (error) {
   console.log(error);
 }
 
+try {
+  console.log(calculateNewStock(10, "loss", 11));
+} catch (error) {
+  if (error instanceof Error) {
+    console.log(error.message);
+  }
+}
