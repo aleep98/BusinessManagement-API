@@ -1,5 +1,5 @@
 import type { Product, CreateProductInput } from "../types/product.js";
-
+import { randomUUID } from "node:crypto";
 
 
 export function createProduct(product: CreateProductInput): Product{
@@ -10,7 +10,7 @@ export function createProduct(product: CreateProductInput): Product{
     const date = new Date()
 
     const myProduct: Product = {
-    id: 'product-1',
+    id: randomUUID(),
     name: product.name,
     description: product.description,
     price: product.price,
