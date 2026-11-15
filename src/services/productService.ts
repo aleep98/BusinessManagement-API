@@ -2,6 +2,8 @@ import type { Product, CreateProductInput } from "../types/product.js";
 import type { MovementType, StockMovement } from "../types/stockMovement.js";
 import { randomUUID } from "node:crypto";
 import { saveMovement } from "../repositories/stockMovementRepository.js";
+import { saveProduct } from "../repositories/productRepository.js";
+import { findAllProducts } from "../repositories/productRepository.js";
 
 export function createProduct(product: CreateProductInput): Product {
   if (product.price <= 0 || product.quantityInStock < 0) {
@@ -22,8 +24,12 @@ export function createProduct(product: CreateProductInput): Product {
     createdAt: date,
     updatedAt: date,
   };
-
+  saveProduct(myProduct)
   return myProduct;
+}
+
+export function listProducts(): Product[] {
+  return findAllProducts()
 }
 
 export function calculateNewStock(
