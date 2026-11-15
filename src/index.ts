@@ -5,6 +5,8 @@ import {
   updateProductStock,
 } from "./services/productService.js";
 
+import { findMovementsByProductId } from "./repositories/stockMovementRepository.js";
+
 function isValidQuantity(quantity: number): boolean {
   if (quantity >= 0) {
     return true;
@@ -56,7 +58,12 @@ try {
   console.log(product.quantityInStock); // saldo original: 20
   console.log(result.updatedProduct.quantityInStock); // saldo novo: 17
   console.log(result.movement); // dados da perda registrada
-  
+
+  const secondResult = adjustStock(result.updatedProduct, "entry", 5);
+  console.log(secondResult.updatedProduct.quantityInStock);
+  const movements = findMovementsByProductId(product.id);
+  console.log(movements.length);
+  console.log(movements);
 } catch (error) {
   console.log(error);
 }

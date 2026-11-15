@@ -1,6 +1,7 @@
 import type { Product, CreateProductInput } from "../types/product.js";
 import type { MovementType, StockMovement } from "../types/stockMovement.js";
 import { randomUUID } from "node:crypto";
+import { saveMovement } from "../repositories/stockMovementRepository.js";
 
 export function createProduct(product: CreateProductInput): Product {
   if (product.price <= 0 || product.quantityInStock < 0) {
@@ -78,6 +79,8 @@ export function createStockMovement(
 export function adjustStock (product: Product, movementType: MovementType, quantity: number ) {
   const updatedProduct = updateProductStock(product, movementType, quantity)
   const movement = createStockMovement(product, movementType, quantity)
+
+  saveMovement(movement)
 
   return { updatedProduct, movement}
 }
