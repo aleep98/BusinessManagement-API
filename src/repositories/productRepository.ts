@@ -10,3 +10,7 @@ export function saveProduct(product: Product): void {
 export function findAllProducts(): Product[] {
     return [...products];
 }
+
+export function findProductById(productId: string): Product | undefined {
+    return products.find((product) => product.id === productId)
+}
