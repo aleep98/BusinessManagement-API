@@ -17,3 +17,5 @@ export interface CreateProductInput {
     quantityInStock: number,
     category: string,
 }
+
+export type UpdateProductInput = Partial<CreateProductInput>;

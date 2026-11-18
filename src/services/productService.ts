@@ -2,7 +2,8 @@ import type { Product, CreateProductInput } from "../types/product.js";
 import type { MovementType, StockMovement } from "../types/stockMovement.js";
 import { randomUUID } from "node:crypto";
 import { saveMovement } from "../repositories/stockMovementRepository.js";
-import { saveProduct, findAllProducts, findProductById } from "../repositories/productRepository.js";
+import { saveProduct, findAllProducts, findProductById, replaceProduct } from "../repositories/productRepository.js";
+import type { UpdateProductInput } from "../types/product.js";
 
 export function createProduct(product: CreateProductInput): Product {
   if (product.price <= 0 || product.quantityInStock < 0) {
@@ -69,6 +70,26 @@ export function updateProductStock(
     quantityInStock: newStock,
     updatedAt: new Date(),
   };
+}
+
+export function updateProduct(productId: string, changes: UpdateProductInput): Product | undefined{
+   const currentProduct = findProductById(productId);
+
+   if(currentProduct === undefined){
+    return undefined
+   }
+
+   const updatedProduct: Product = {
+    ...currentProduct,
+    ...changes,
+    updatedAt: new Date(),
+   }
+
+   if(!replaceProduct(updatedProduct)) {
+    return undefined;
+   }
+
+   return updatedProduct;
 }
 
 export function createStockMovement(
