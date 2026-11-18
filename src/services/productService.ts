@@ -1,7 +1,7 @@
 import type { Product, CreateProductInput } from "../types/product.js";
 import type { MovementType, StockMovement } from "../types/stockMovement.js";
 import { randomUUID } from "node:crypto";
-import { saveMovement } from "../repositories/stockMovementRepository.js";
+import { findMovementsByProductId, saveMovement } from "../repositories/stockMovementRepository.js";
 import { saveProduct, findAllProducts, findProductById, replaceProduct } from "../repositories/productRepository.js";
 import type { UpdateProductInput } from "../types/product.js";
 
@@ -108,9 +108,16 @@ export function createStockMovement(
 
 export function adjustStock (product: Product, movementType: MovementType, quantity: number ) {
   const updatedProduct = updateProductStock(product, movementType, quantity)
+  if(!replaceProduct(updatedProduct)) {
+    throw new Error("Product not found.");
+  }
   const movement = createStockMovement(product, movementType, quantity)
 
   saveMovement(movement)
 
   return { updatedProduct, movement}
+}
+
+export function listStockMovementsByProductId(productId: string): StockMovement[] {
+  return findMovementsByProductId(productId)
 }
