@@ -30,3 +30,8 @@ export function findProductsByCategory(category: string): Product[]{
   return products.filter((product) =>  product.category === category)
   
 }
+
+export function findProductsWithStockAtMost(threshold: number): Product[]{
+  return products.filter((product) => product.quantityInStock <= threshold);
+}
+

@@ -2,6 +2,7 @@ import { Router } from "express";
 import {
   createProductController,
   getProductByIdController,
+  listLowStockProductsController,
   listProductsController,
   updateProductController,
 } from "../controllers/productController.js";
@@ -11,6 +12,7 @@ const router = Router();
 
 router.get("/", listProductsController);
 router.post("/", createProductController);
+router.get("/low-stock", listLowStockProductsController);
 router.get("/:id", getProductByIdController);
 router.patch("/:id", updateProductController);
 router.post("/:id/stock-movements", createStockMovementController);
