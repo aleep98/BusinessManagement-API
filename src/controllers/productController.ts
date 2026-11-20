@@ -1,7 +1,8 @@
-import type { Request, Response } from "express";
+import { type Request, type Response } from "express";
 import {
   createProduct,
   getProductById,
+  listLowStockProducts,
   listProducts,
   updateProduct,
 } from "../services/productService.js";
@@ -73,4 +74,26 @@ export function updateProductController(req: Request, res: Response) {
   }
 
   return res.json(updatedProduct);
+}
+
+export function listLowStockProductsController(req: Request, res: Response) {
+  const rawThreshold = req.query.threshold;
+
+  if (typeof rawThreshold !== "string" || rawThreshold.trim() === "") {
+    return res.status(400).json({
+      success: false,
+      message: "The threshold query parameter is required.",
+    });
+  }
+
+  const threshold = Number(rawThreshold);
+
+  if (!Number.isFinite(threshold) || threshold < 0) {
+    return res.status(400).json({
+      success: false,
+      message: "Threshold must be a number greater than or equal to zero.",
+    });
+  }
+
+  return res.json(listLowStockProducts(threshold));
 }

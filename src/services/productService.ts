@@ -2,8 +2,9 @@ import type { Product, CreateProductInput } from "../types/product.js";
 import type { MovementType, StockMovement } from "../types/stockMovement.js";
 import { randomUUID } from "node:crypto";
 import { findMovementsByProductId, saveMovement } from "../repositories/stockMovementRepository.js";
-import { saveProduct, findAllProducts, findProductById, replaceProduct, findProductsByCategory } from "../repositories/productRepository.js";
+import { saveProduct, findAllProducts, findProductById, replaceProduct, findProductsByCategory, findProductsWithStockAtMost } from "../repositories/productRepository.js";
 import type { UpdateProductInput } from "../types/product.js";
+
 
 export function createProduct(product: CreateProductInput): Product {
   if (product.price <= 0 || product.quantityInStock < 0) {
@@ -124,4 +125,8 @@ export function adjustStock (product: Product, movementType: MovementType, quant
 
 export function listStockMovementsByProductId(productId: string): StockMovement[] {
   return findMovementsByProductId(productId)
+}
+
+export function listLowStockProducts(threshold: number): Product[]{
+  return findProductsWithStockAtMost(threshold)
 }
