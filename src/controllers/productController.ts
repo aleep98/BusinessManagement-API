@@ -3,13 +3,18 @@ import {
   createProduct,
   getProductById,
   listProducts,
-  updateProduct
+  updateProduct,
 } from "../services/productService.js";
 import { createProductSchema } from "../schemas/createProductSchema.js";
 import { updateProductSchema } from "../schemas/updateProductSchema.js";
 
-export function listProductsController(_req: Request, res: Response) {
-  res.json(listProducts());
+export function listProductsController(req: Request, res: Response) {
+  const category = req.query.category;
+
+  if (category !== undefined && typeof category !== "string") {
+    return res.status(400).json({ message: "Invalid category." });
+  }
+  return res.json(listProducts(category));
 }
 
 export function createProductController(req: Request, res: Response) {
@@ -40,17 +45,17 @@ export function getProductByIdController(req: Request, res: Response) {
 }
 
 export function updateProductController(req: Request, res: Response) {
-   const id = req.params.id;
+  const id = req.params.id;
 
   if (typeof id !== "string") {
     return res.status(400).json({
       success: false,
     });
   }
-  const result = updateProductSchema.safeParse(req.body)
+  const result = updateProductSchema.safeParse(req.body);
 
-  if(result.success === false){
-   return res.status(400).json({ errors: result.error.issues });
+  if (result.success === false) {
+    return res.status(400).json({ errors: result.error.issues });
   }
 
   const changes = result.data;
@@ -58,14 +63,14 @@ export function updateProductController(req: Request, res: Response) {
   if (Object.keys(changes).length === 0) {
     return res.status(400).json({
       sucesso: false,
-      message: "No valid fields were provided for update."
+      message: "No valid fields were provided for update.",
     });
   }
 
   const updatedProduct = updateProduct(id, changes);
-  if(updatedProduct === undefined){
-    return res.status(404).json({ errors: "Product not found."});
+  if (updatedProduct === undefined) {
+    return res.status(404).json({ errors: "Product not found." });
   }
 
-  return res.json(updatedProduct)
+  return res.json(updatedProduct);
 }

@@ -25,3 +25,8 @@ export function replaceProduct(product: Product): boolean {
 
   return true;
 }
+
+export function findProductsByCategory(category: string): Product[]{
+  return products.filter((product) =>  product.category === category)
+  
+}
